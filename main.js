@@ -38,7 +38,7 @@ var out = pyreqBackend.generate(req)
 
 ReactDOM.render(
   <Lowlight
-    language="bash"
+   language={curlFrontend.highlighter}
     value={input}
   />,
   document.getElementById('input')
@@ -46,7 +46,7 @@ ReactDOM.render(
 
 ReactDOM.render(
   <Lowlight
-    language="python"
+    language={pyreqBackend.highlighter}
     value={out}
   />,
   document.getElementById('output')
