@@ -1,8 +1,8 @@
 {
-  "name": "curl2py",
+  "name": "http-translator",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Translate curl commands to Python Requests code",
+  "main": "main.js",
   "dependencies": {
     "argparse": "^1.0.10",
     "shlex": "^1.0.1"
@@ -11,6 +11,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Ryan Govostes",
   "license": "MIT"
 }
