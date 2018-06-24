@@ -9,7 +9,7 @@
     "react": "^16.4.1",
     "react-codemirror2": "^5.0.4",
     "react-dom": "^16.4.1",
-    "shlex": "^1.0.1"
+    "shlex": "^1.0.2"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
