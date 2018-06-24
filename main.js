@@ -39,12 +39,13 @@ class App extends React.Component {
     super()
     this.state = {
       frontends: [
-        require('./lib/frontends/curl')
+        require('./lib/frontends/curl'),
+        require('./lib/frontends/json')
       ],
       
       backends: [
-        require('./lib/backends/json'),
-        require('./lib/backends/python-requests')
+        require('./lib/backends/python-requests'),
+        require('./lib/backends/json')
       ],
       
       input: initialInput
