@@ -3,7 +3,7 @@
 set -e
 
 rm -Rf dist && mkdir dist
-browserify -t [ babelify --presets [ env react ] ] main.js -o dist/bundle.js
+browserify -t [ babelify --presets [ env react ] ] --debug main.js -o dist/bundle.js
 cp index.html dist/index.html
 cp node_modules/codemirror/lib/codemirror.css dist/codemirror.css
 cp node_modules/codemirror/theme/material.css dist/theme.css
