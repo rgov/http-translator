@@ -3,19 +3,18 @@
 
 const React = require('react')
 const ReactDOM = require('react-dom')
+const CodeMirror = require('react-codemirror2')
 
 const curlFrontend = require('./lib/frontends/curl')
 const pyreqBackend = require('./lib/backends/python-requests')
 
-const Lowlight = require('react-lowlight')
-Lowlight.registerLanguage(
-  'bash',
-  require('highlight.js/lib/languages/bash')
-)
-Lowlight.registerLanguage(
-  'python',
-  require('highlight.js/lib/languages/python')
-)
+
+// This tells Browserify to pull in these syntax highlighters. We cannot do this
+// dynamically, so make sure to update this if new frontends or backends are
+// added.
+require('codemirror/mode/shell/shell')
+require('codemirror/mode/python/python')
+
 
 const input = `curl 'http://seethroughny.net/tools/required/reports/payroll?action=get' \\
 -XPOST \\
@@ -37,17 +36,24 @@ var req = curlFrontend.parse(input)
 var out = pyreqBackend.generate(req)
 
 ReactDOM.render(
-  <Lowlight
-   language={curlFrontend.highlighter}
+  <CodeMirror.UnControlled
     value={input}
+    options={{
+      mode: curlFrontend.highlighter,
+      theme: 'material',
+      lineNumbers: true
+    }}
+    onChange={(editor, data, value) => {
+      
+    }}
   />,
   document.getElementById('input')
 )
 
-ReactDOM.render(
-  <Lowlight
-    language={pyreqBackend.highlighter}
-    value={out}
-  />,
-  document.getElementById('output')
-)
+// ReactDOM.render(
+//   <Lowlight
+//     language={pyreqBackend.highlighter}
+//     value={out}
+//   />,
+//   document.getElementById('output')
+// )
