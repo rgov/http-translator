@@ -5,7 +5,6 @@
   "main": "main.js",
   "dependencies": {
     "argparse": "^1.0.10",
-    "browserify": "^16.2.2",
     "codemirror": "^5.39.0",
     "react": "^16.4.1",
     "react-codemirror2": "^5.0.4",
@@ -14,13 +13,17 @@
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.4",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
-    "babelify": "^8.0.0"
+    "copy-webpack-plugin": "^4.5.1",
+    "uglifyjs-webpack-plugin": "^1.2.6",
+    "webpack": "^4.12.0",
+    "webpack-cli": "^3.0.8"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "./dist.sh"
+    "build": "npx webpack"
   },
   "author": "Ryan Govostes",
   "license": "MIT",
