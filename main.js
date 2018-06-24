@@ -53,8 +53,6 @@ class App extends React.Component {
     this.state.frontend = this.state.frontends[0]
     this.state.backend  = this.state.backends[0]
     
-    console.log(this.state.backends)
-    
     // Bind `this` so that handlers for JavaScript events work
     this.handleFrontendChange = this.handleFrontendChange.bind(this);
     this.handleBackendChange  = this.handleBackendChange.bind(this);
