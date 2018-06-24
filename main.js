@@ -11,8 +11,9 @@ const pyreqBackend = require('./lib/backends/python-requests')
 // This tells Browserify to pull in these syntax highlighters. We cannot do this
 // dynamically, so make sure to update this if new frontends or backends are
 // added.
-require('codemirror/mode/shell/shell')
+require('codemirror/mode/javascript/javascript')
 require('codemirror/mode/python/python')
+require('codemirror/mode/shell/shell')
 
 
 const initialInput = `curl 'http://seethroughny.net/tools/required/reports/payroll?action=get' \\
@@ -37,13 +38,29 @@ class App extends React.Component {
   constructor() {
     super()
     this.state = {
-      input: initialInput,
-      frontend: curlFrontend,
-      backend: pyreqBackend
+      frontends: [
+        require('./lib/frontends/curl')
+      ],
+      
+      backends: [
+        require('./lib/backends/json'),
+        require('./lib/backends/python-requests')
+      ],
+      
+      input: initialInput
     }
+    
+    this.state.frontend = this.state.frontends[0]
+    this.state.backend  = this.state.backends[0]
+    
+    console.log(this.state.backends)
+    
+    // Bind `this` so that handlers for JavaScript events work
+    this.handleFrontendChange = this.handleFrontendChange.bind(this);
+    this.handleBackendChange  = this.handleBackendChange.bind(this);
   }
   
-  process() {
+  handleCodeChange() {
     try {
       var req = this.state.frontend.parse(this.state.input)
       return this.state.backend.generate(req)
@@ -54,10 +71,33 @@ class App extends React.Component {
     }
   }
   
+  handleFrontendChange(event) {
+    for (var frontend of this.state.frontends) {
+      if (frontend.name === event.target.value) {
+        this.setState({ frontend: frontend })
+        return
+      }
+    }
+  }
+  
+  handleBackendChange(event) {
+    for (var backend of this.state.backends) {
+      if (backend.name === event.target.value) {
+        this.setState({ backend: backend })
+        return
+      }
+    }
+  }
+  
   render() {
     return (
       <div>
         <h2>Input</h2>
+        <select value={this.state.frontend.name} onChange={this.handleFrontendChange}>
+          {this.state.frontends.map(function(frontend, i) {
+            return <option value={frontend.name}>{frontend.name}</option>
+          })}
+        </select>
         <div>
           <CodeMirror.Controlled
             value={this.state.input}
@@ -73,9 +113,14 @@ class App extends React.Component {
         </div>
           
         <h2>Output</h2>
+        <select value={this.state.backend.name} onChange={this.handleBackendChange}>
+          {this.state.backends.map(function(backend, i) {
+            return <option value={backend.name}>{backend.name}</option>
+          })}
+        </select>
         <div>
           <CodeMirror.Controlled
-            value={this.process()}
+            value={this.handleCodeChange()}
             options={{
               mode: this.state.backend.highlighter,
               theme: 'material',
