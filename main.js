@@ -16,7 +16,7 @@ require('codemirror/mode/shell/shell')
 require('codemirror/mode/python/python')
 
 
-const input = `curl 'http://seethroughny.net/tools/required/reports/payroll?action=get' \\
+const initialInput = `curl 'http://seethroughny.net/tools/required/reports/payroll?action=get' \\
 -XPOST \\
 -H 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8' \\
 -H 'Origin: http://seethroughny.net' \\
@@ -32,28 +32,62 @@ const input = `curl 'http://seethroughny.net/tools/required/reports/payroll?acti
 -H 'X-Requested-With: XMLHttpRequest' \\
 --data 'PayYear%5B%5D=2017&SortBy=YTDPay+DESC&current_page=0&result_id=0&url=%2Ftools%2Frequired%2Freports%2Fpayroll%3Faction%3Dget&nav_request=0'`
 
-var req = curlFrontend.parse(input)
-var out = pyreqBackend.generate(req)
 
-ReactDOM.render(
-  <CodeMirror.UnControlled
-    value={input}
-    options={{
-      mode: curlFrontend.highlighter,
-      theme: 'material',
-      lineNumbers: true
-    }}
-    onChange={(editor, data, value) => {
-      
-    }}
-  />,
-  document.getElementById('input')
-)
 
-// ReactDOM.render(
-//   <Lowlight
-//     language={pyreqBackend.highlighter}
-//     value={out}
-//   />,
-//   document.getElementById('output')
-// )
+class App extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      input: initialInput,
+      frontend: curlFrontend,
+      backend: pyreqBackend
+    }
+  }
+  
+  process() {
+    try {
+      var req = this.state.frontend.parse(this.state.input)
+      return this.state.backend.generate(req)
+    } catch (err) {
+      // TODO: Present the error message to the user somehow
+      console.log(err)
+      return ''
+    }
+  }
+  
+  render() {
+    return (
+      <div>
+        <h2>Input</h2>
+        <div>
+          <CodeMirror.Controlled
+            value={this.state.input}
+            options={{
+              mode: this.state.frontend.highlighter,
+              theme: 'material',
+              lineNumbers: true
+            }}
+            onBeforeChange={(editor, data, value) => {
+              this.setState({ input: value })
+            }}
+          />
+        </div>
+          
+        <h2>Output</h2>
+        <div>
+          <CodeMirror.Controlled
+            value={this.process()}
+            options={{
+              mode: this.state.backend.highlighter,
+              theme: 'material',
+              lineNumbers: true,
+              readOnly: true
+            }}
+          />
+        </div>
+      </div>
+    )
+  }
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
