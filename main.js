@@ -11,6 +11,7 @@ const pyreqBackend = require('./lib/backends/python-requests')
 // This tells Browserify to pull in these syntax highlighters. We cannot do this
 // dynamically, so make sure to update this if new frontends or backends are
 // added.
+require('codemirror/mode/http/http')
 require('codemirror/mode/javascript/javascript')
 require('codemirror/mode/python/python')
 require('codemirror/mode/shell/shell')
@@ -40,6 +41,7 @@ class App extends React.Component {
     this.state = {
       frontends: [
         require('./lib/frontends/curl'),
+        require('./lib/frontends/http'),
         require('./lib/frontends/json')
       ],
       
@@ -48,32 +50,37 @@ class App extends React.Component {
         require('./lib/backends/json')
       ],
       
-      input: initialInput
+      input: initialInput,
+      output: ''
     }
     
     this.state.frontend = this.state.frontends[0]
     this.state.backend  = this.state.backends[0]
     
     // Bind `this` so that handlers for JavaScript events work
-    this.handleFrontendChange = this.handleFrontendChange.bind(this);
-    this.handleBackendChange  = this.handleBackendChange.bind(this);
+    this.handleFrontendChange = this.handleFrontendChange.bind(this)
+    this.handleBackendChange  = this.handleBackendChange.bind(this)
+    
+    // Kick off a regeneration
+    this.handleCodeChange()
   }
   
   handleCodeChange() {
-    try {
-      var req = this.state.frontend.parse(this.state.input)
-      return this.state.backend.generate(req)
-    } catch (err) {
+    var p = Promise.resolve(this.state.frontend.parse(this.state.input))
+    p.catch(function (error) {
       // TODO: Present the error message to the user somehow
-      console.log(err)
-      return ''
-    }
+      console.log(error)
+    })
+    p.then(function (request) {
+      this.setState({ output: this.state.backend.generate(request) })
+    }.bind(this))
   }
   
   handleFrontendChange(event) {
     for (var frontend of this.state.frontends) {
       if (frontend.name === event.target.value) {
         this.setState({ frontend: frontend })
+        this.handleCodeChange()
         return
       }
     }
@@ -83,6 +90,7 @@ class App extends React.Component {
     for (var backend of this.state.backends) {
       if (backend.name === event.target.value) {
         this.setState({ backend: backend })
+        this.handleCodeChange()
         return
       }
     }
@@ -107,6 +115,7 @@ class App extends React.Component {
             }}
             onBeforeChange={(editor, data, value) => {
               this.setState({ input: value })
+              this.handleCodeChange()
             }}
           />
         </div>
@@ -119,7 +128,7 @@ class App extends React.Component {
         </select>
         <div>
           <CodeMirror.Controlled
-            value={this.handleCodeChange()}
+            value={this.state.output}
             options={{
               mode: this.state.backend.highlighter,
               theme: 'material',
