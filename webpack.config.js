@@ -8,8 +8,6 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 module.exports = {
   mode: 'production',
   
-  devtool: 'source-map',
-  
   entry: './main.js',
   output: {
     filename: '[name].bundle.js',
