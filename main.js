@@ -86,7 +86,7 @@ class App extends React.Component {
         <h2>Input</h2>
         <select value={this.state.frontend.name} onChange={this.handleFrontendChange}>
           {this.state.frontends.map(function(frontend, i) {
-            return <option value={frontend.name}>{frontend.name}</option>
+            return <option key={frontend.name} value={frontend.name}>{frontend.name}</option>
           })}
         </select>
         <button
@@ -113,7 +113,7 @@ class App extends React.Component {
         <h2>Output</h2>
         <select value={this.state.backend.name} onChange={this.handleBackendChange}>
           {this.state.backends.map(function(backend, i) {
-            return <option value={backend.name}>{backend.name}</option>
+            return <option key={backend.name} value={backend.name}>{backend.name}</option>
           })}
         </select>
         <div>
