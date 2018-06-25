@@ -17,45 +17,29 @@ require('codemirror/mode/python/python')
 require('codemirror/mode/shell/shell')
 
 
-const initialInput = `curl 'http://seethroughny.net/tools/required/reports/payroll?action=get' \\
--XPOST \\
--H 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8' \\
--H 'Origin: http://seethroughny.net' \\
--H 'Host: seethroughny.net' \\
--H 'Accept: application/json, text/javascript, */*; q=0.01' \\
--H 'Connection: keep-alive' \\
--H 'Accept-Language: en-us' \\
--H 'Accept-Encoding: gzip, deflate' \\
--H 'Cookie: CONCRETE5=291419e390a3b67a3946e0854cc9e33e' \\
--H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_5) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.1.1 Safari/605.1.15' \\
--H 'Referer: http://seethroughny.net/payrolls' \\
--H 'Content-Length: 137' \\
--H 'X-Requested-With: XMLHttpRequest' \\
---data 'PayYear%5B%5D=2017&SortBy=YTDPay+DESC&current_page=0&result_id=0&url=%2Ftools%2Frequired%2Freports%2Fpayroll%3Faction%3Dget&nav_request=0'`
-
-
-
 class App extends React.Component {
   constructor() {
     super()
-    this.state = {
-      frontends: [
-        require('./lib/frontends/curl'),
-        require('./lib/frontends/http'),
-        require('./lib/frontends/json')
-      ],
-      
-      backends: [
-        require('./lib/backends/python-requests'),
-        require('./lib/backends/json')
-      ],
-      
-      input: initialInput,
-      output: ''
-    }
+    this.state = {}
     
+    // List the frontends and backends we want to load
+    this.state.frontends = [
+      require('./lib/frontends/curl'),
+      require('./lib/frontends/http'),
+      require('./lib/frontends/json')
+    ]
+    this.state.backends = [
+      require('./lib/backends/python-requests'),
+      require('./lib/backends/json')
+    ]
+    
+    // Choose the default frontends
     this.state.frontend = this.state.frontends[0]
     this.state.backend  = this.state.backends[0]
+    
+    // Set the default input and clear output
+    this.state.input = this.state.frontend.example
+    this.state.output = ''
     
     // Bind `this` so that handlers for JavaScript events work
     this.handleFrontendChange = this.handleFrontendChange.bind(this)
@@ -67,13 +51,13 @@ class App extends React.Component {
   
   handleCodeChange() {
     var p = Promise.resolve(this.state.frontend.parse(this.state.input))
-    p.catch(function (error) {
+    p.catch((error) => {
       // TODO: Present the error message to the user somehow
       console.log(error)
     })
-    p.then(function (request) {
+    p.then((request) => {
       this.setState({ output: this.state.backend.generate(request) })
-    }.bind(this))
+    })
   }
   
   handleFrontendChange(event) {
@@ -105,6 +89,12 @@ class App extends React.Component {
             return <option value={frontend.name}>{frontend.name}</option>
           })}
         </select>
+        <button
+          onClick={() => {
+            this.setState({ input: this.state.frontend.example })
+          }}
+          disabled={this.state.frontend.example === undefined}
+        >Load Example</button>
         <div>
           <CodeMirror.Controlled
             value={this.state.input}
