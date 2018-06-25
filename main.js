@@ -44,19 +44,35 @@ class App extends React.Component {
     // Bind `this` so that handlers for JavaScript events work
     this.handleFrontendChange = this.handleFrontendChange.bind(this)
     this.handleBackendChange  = this.handleBackendChange.bind(this)
-    
-    // Kick off a regeneration
+  }
+  
+  componentDidMount() {
+    // Kick off the initial generation
     this.handleCodeChange()
   }
   
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    // Re-generate if any of the input parameters changed 
+    if ((this.state.input !== prevState.input ||
+        this.state.frontend !== prevState.frontend ||
+        this.state.backend !== prevState.backend) &&
+        this.state.output === prevState.output) {
+          
+      this.handleCodeChange()
+    }
+  }
+  
   handleCodeChange() {
-    var p = Promise.resolve(this.state.frontend.parse(this.state.input))
-    p.catch((error) => {
+    var p = Promise.resolve(this.state.input)
+    p.then((input) => {
+      return this.state.frontend.parse(input)
+    }).then((request) => {
+      return this.state.backend.generate(request)
+    }).then((output) => {
+      this.setState({ output: output })
+    }).catch((error) => {
       // TODO: Present the error message to the user somehow
-      console.log(error)
-    })
-    p.then((request) => {
-      this.setState({ output: this.state.backend.generate(request) })
+      console.log('I caught an error:', error)
     })
   }
   
@@ -64,7 +80,6 @@ class App extends React.Component {
     for (var frontend of this.state.frontends) {
       if (frontend.name === event.target.value) {
         this.setState({ frontend: frontend })
-        this.handleCodeChange()
         return
       }
     }
@@ -74,7 +89,6 @@ class App extends React.Component {
     for (var backend of this.state.backends) {
       if (backend.name === event.target.value) {
         this.setState({ backend: backend })
-        this.handleCodeChange()
         return
       }
     }
@@ -92,7 +106,6 @@ class App extends React.Component {
         <button
           onClick={() => {
             this.setState({ input: this.state.frontend.example })
-            this.handleCodeChange()
           }}
           disabled={this.state.frontend.example === undefined}
         >Load Example</button>
@@ -106,7 +119,6 @@ class App extends React.Component {
             }}
             onBeforeChange={(editor, data, value) => {
               this.setState({ input: value })
-              this.handleCodeChange()
             }}
           />
         </div>
