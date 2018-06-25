@@ -92,6 +92,7 @@ class App extends React.Component {
         <button
           onClick={() => {
             this.setState({ input: this.state.frontend.example })
+            this.handleCodeChange()
           }}
           disabled={this.state.frontend.example === undefined}
         >Load Example</button>
