@@ -7,9 +7,9 @@
     "argparse": "^1.0.10",
     "codemirror": "^5.39.0",
     "http-parser-js": "^0.4.13",
-    "react": "^16.4.1",
+    "preact": "^8.2.9",
+    "preact-compat": "^3.18.0",
     "react-codemirror2": "^5.0.4",
-    "react-dom": "^16.4.1",
     "shlex": "^1.0.2"
   },
   "devDependencies": {

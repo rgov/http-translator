@@ -28,6 +28,14 @@ module.exports = {
     ]
   },
   
+  // Use Preact compatibility layer in React's place
+  resolve: {
+    alias: {
+      'react': 'preact-compat',
+      'react-dom': 'preact-compat',
+    }
+  },
+  
   plugins: [
     new CopyWebpackPlugin([
       { from: 'index.html' },
