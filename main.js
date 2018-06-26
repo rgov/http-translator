@@ -22,11 +22,16 @@ class App extends React.Component {
     super()
     this.state = {}
     
-    // List the frontends and backends we want to load
+    // List the frontends, transforms, and backends we want to load
     this.state.frontends = [
       require('./lib/frontends/curl'),
       require('./lib/frontends/http'),
       require('./lib/frontends/json')
+    ]
+    this.state.transforms = [
+      require('./lib/transforms/drop-host-header'),
+      require('./lib/transforms/drop-content-length-header'),
+      require('./lib/transforms/split-form-data'),
     ]
     this.state.backends = [
       require('./lib/backends/python-requests'),
@@ -66,6 +71,12 @@ class App extends React.Component {
     var p = Promise.resolve(this.state.input)
     p.then((input) => {
       return this.state.frontend.parse(input)
+    }).then((request) => {
+      for (let transform of this.state.transforms) {
+        console.log('I will apply this transform:', transform.name)
+        transform.transform(request)
+      }
+      return request
     }).then((request) => {
       return this.state.backend.generate(request)
     }).then((output) => {
