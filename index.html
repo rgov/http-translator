@@ -8,7 +8,119 @@
   <meta name="author" content="Ryan Govostes">
   
   <link rel="stylesheet" type="text/css" href="codemirror.css">
-  <link rel="stylesheet" type="text/css" href="theme.css">
+  <!--<link rel="stylesheet" type="text/css" href="theme.css">-->
+  
+  <style type="text/css">
+    @import url('https://fonts.googleapis.com/css?family=Crete+Round|Raleway');
+    
+    body {
+      font-family: 'Raleway', sans-serif;
+      margin: 0;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Crete Round', serif;
+      margin: 0;
+    }
+    
+    h1 {
+      font-size: 48px;
+    }
+    
+    a {
+      text-decoration: none;
+    }
+    
+    .top {
+      padding: 20px;
+      position: relative;
+    }
+    
+    .github {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
+    
+    .github a {
+      color: #ccc;
+    }
+    
+    .github a: hover {
+      color: black;
+    }
+    
+    .github .icon {
+      width: 48px;
+    }
+    
+    .top ul {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .top ul li {
+      display: inline;
+      padding-right: 40px;
+    }
+    
+    .CodeMirror {
+      /*border: 1px solid #eee;*/
+      height: auto;
+    }
+    
+    .parent {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    
+    .child {
+      width: 50%;
+    }
+    
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      
+      border-bottom: 1px solid #dee2e6;
+      padding: 0 20px;
+    }
+    
+    .nav-tabs {
+      display: flex;
+      list-style: none;
+      padding: 0;
+      margin-bottom: 0;
+    }
+    
+    .nav-tabs .nav-item {
+      margin-bottom: -1px;
+    }
+    
+    .nav-tabs .nav-link.active {
+      color: black;
+      background-color: white;
+      border-color: #dee2e6 #dee2e6 white;
+    }
+    
+    .nav-tabs .nav-link {
+      border: 1px solid transparent;
+      border-top-left-radius: 0.25rem;
+      border-top-right-radius: 0.25rem;
+    }
+    
+    .nav-link {
+      display: block;
+      padding: .5rem 1rem;
+    }
+    
+    @media (max-width: 800px) {
+      .child {
+        width: 100%;
+      }
+    }
+  </style>
   
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-115469950-1"></script>
@@ -21,7 +133,16 @@
 </head>
 
 <body>
-  <h1>HTTP Request Translator</h1>
+  <div class="top">
+    <h1>HTTP Request Translator</h1>
+    <p>by <a href="https://ryan.govost.es/">Ryan Govostes</a></p>
+    
+    <div class="github">
+      <a href="https://www.github.com/rgov/http-translator">
+        <img class="icon" src="https://unpkg.com/simple-icons@latest/icons/github.svg">
+      </a>
+    </div>
+  </div>
   
   <div id="root"></div>
   

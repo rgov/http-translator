@@ -2,7 +2,9 @@
 
 const React = require('react')
 const ReactDOM = require('react-dom')
+
 const CodeMirror = require('react-codemirror2')
+const CodeMirrorJS = require('codemirror')
 
 const curlFrontend = require('./lib/frontends/curl')
 const pyreqBackend = require('./lib/backends/python-requests')
@@ -49,9 +51,25 @@ class App extends React.Component {
     // Bind `this` so that handlers for JavaScript events work
     this.handleFrontendChange = this.handleFrontendChange.bind(this)
     this.handleBackendChange  = this.handleBackendChange.bind(this)
+    
+    // These will store our code editor instances, after they've mounted
+    this.inputEditor = null
+    this.outputEditor = null
   }
   
   componentDidMount() {
+    // Wire up the renderLine handler on both of them
+    for (let editor of [this.inputEditor, this.outputEditor]) {
+      editor.on('renderLine', (cm, line, elt) => {
+        let charWidth = editor.defaultCharWidth()
+        let hangingIndent = charWidth * 2
+        var off = CodeMirrorJS.countColumn(line.text, null, cm.getOption('tabSize')) * charWidth
+        elt.style.textIndent = `-${hangingIndent + off}px`
+        elt.style.paddingLeft = `${hangingIndent + off}px`
+      })
+      editor.refresh()
+    }
+    
     // Kick off the initial generation
     this.handleCodeChange()
   }
@@ -107,49 +125,78 @@ class App extends React.Component {
   
   render() {
     return (
-      <div>
-        <h2>Input</h2>
-        <select value={this.state.frontend.name} onChange={this.handleFrontendChange}>
-          {this.state.frontends.map(function(frontend, i) {
-            return <option key={frontend.name} value={frontend.name}>{frontend.name}</option>
-          })}
-        </select>
-        <button
-          onClick={() => {
-            this.setState({ input: this.state.frontend.example })
-          }}
-          disabled={this.state.frontend.example === undefined}
-        >Load Example</button>
-        <div>
-          <CodeMirror.Controlled
-            value={this.state.input}
-            options={{
-              mode: this.state.frontend.highlighter,
-              theme: 'material',
-              lineNumbers: true
-            }}
-            onBeforeChange={(editor, data, value) => {
-              this.setState({ input: value })
-            }}
-          />
+      <div class="parent">
+        <div class="child">
+          <div class="nav">
+            <ul class="nav-tabs">
+              <li class="nav-item"><span class="nav-link active">Input</span></li>
+            </ul>
+            <ul class="nav-tabs controls">
+              <li class="nav-item">
+                <button
+                  onClick={() => {
+                    this.setState({ input: this.state.frontend.example })
+                  }}
+                  disabled={this.state.frontend.example === undefined}
+                >Load Example</button>
+              </li>
+              <li class="nav-item">
+                <select value={this.state.frontend.name} onChange={this.handleFrontendChange}>
+                  {this.state.frontends.map(function(frontend, i) {
+                    return <option key={frontend.name} value={frontend.name}>{frontend.name}</option>
+                  })}
+                </select>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <CodeMirror.Controlled
+              value={this.state.input}
+              options={{
+                mode: this.state.frontend.highlighter,
+                //theme: 'material',
+                lineNumbers: true,
+                lineWrapping: true,
+                viewportMargin: Infinity
+              }}
+              onBeforeChange={(editor, data, value) => {
+                this.setState({ input: value })
+              }}
+              editorDidMount={(editor) => { this.inputEditor = editor }}
+            />
+          </div>
         </div>
           
-        <h2>Output</h2>
-        <select value={this.state.backend.name} onChange={this.handleBackendChange}>
-          {this.state.backends.map(function(backend, i) {
-            return <option key={backend.name} value={backend.name}>{backend.name}</option>
-          })}
-        </select>
-        <div>
-          <CodeMirror.Controlled
-            value={this.state.output}
-            options={{
-              mode: this.state.backend.highlighter,
-              theme: 'material',
-              lineNumbers: true,
-              readOnly: true
-            }}
-          />
+        <div class="child">
+          <div class="nav">
+            <ul class="nav-tabs">
+              <li class="nav-item"><a class="nav-link active" href="#">Output</a></li>
+              <li class="nav-item"><a class="nav-link" href="#">Log</a></li>
+            </ul>
+            <ul class="nav-tabs controls">
+              <li class="nav-item">
+                <select value={this.state.backend.name} onChange={this.handleBackendChange}>
+                  {this.state.backends.map(function(backend, i) {
+                    return <option key={backend.name} value={backend.name}>{backend.name}</option>
+                  })}
+                </select>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <CodeMirror.Controlled
+              value={this.state.output}
+              options={{
+                mode: this.state.backend.highlighter,
+                //theme: 'material',
+                lineNumbers: true,
+                lineWrapping: true,
+                viewportMargin: Infinity,
+                readOnly: true
+              }}
+              editorDidMount={(editor) => { this.outputEditor = editor }}
+            />
+          </div>
         </div>
       </div>
     )
