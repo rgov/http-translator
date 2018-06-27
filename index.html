@@ -78,6 +78,48 @@
       width: 50%;
     }
     
+    button, select {
+      padding:.375rem .75rem;
+      color: #495057;
+      vertical-align: middle;
+      border: 1px solid #ced4da;
+      border-radius: .25rem;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+    }
+    
+    button:disabled {
+      color: #007bff;
+      background-color: transparent;
+      opacity: .65;
+    }
+    
+    button:not(:disabled) {
+      cursor: pointer;
+    }
+    
+    button {
+      color: #007bff;
+      background-color: transparent;
+      background-image: none;
+      border-color: #007bff;
+      text-align: center;
+      transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    }
+    
+    button:not(:disabled):hover, button:not(:disabled):active {
+      color: #fff;
+      background-color: #007bff;
+      border-color: #007bff;
+    }
+    
+    select {
+      padding-right: 1.75rem;
+      background: #fff url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E") no-repeat right .75rem center;
+      background-size: 8px 10px;
+    }
+    
     .nav {
       display: flex;
       justify-content: space-between;
