@@ -39,8 +39,7 @@ module.exports = {
   plugins: [
     new CopyWebpackPlugin([
       { from: 'index.html' },
-      { from: 'node_modules/codemirror/lib/codemirror.css' },
-      { from: 'node_modules/codemirror/theme/material.css', to: 'theme.css' },
+      { from: 'node_modules/codemirror/lib/codemirror.css' }
     ])
   ],
   

@@ -154,7 +154,6 @@ class App extends React.Component {
               value={this.state.input}
               options={{
                 mode: this.state.frontend.highlighter,
-                //theme: 'material',
                 lineNumbers: true,
                 lineWrapping: true,
                 viewportMargin: Infinity
@@ -188,7 +187,6 @@ class App extends React.Component {
               value={this.state.output}
               options={{
                 mode: this.state.backend.highlighter,
-                //theme: 'material',
                 lineNumbers: true,
                 lineWrapping: true,
                 viewportMargin: Infinity,
