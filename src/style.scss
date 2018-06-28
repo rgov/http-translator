@@ -146,6 +146,23 @@ select {
   padding: .45rem .9rem;
 }
 
+.logger {
+  ul {
+    list-style: none;
+    padding: 0;
+
+    li {
+      &:before { content: "• "; }
+      padding-left: 1em;
+      text-indent: -.7em;
+    }
+
+    li.error:before { color: red; }
+    li.log:before { color: gray; }
+  }
+} 
+
+
 @media (max-width: 800px) {
   .child {
     width: 100%;

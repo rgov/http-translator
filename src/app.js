@@ -28,8 +28,8 @@ class Logger extends React.Component {
       messages: []
     }
     
-    this.log.bind(this)
-    this.error.bind(this)
+    this.log = this.log.bind(this)
+    this.error = this.error.bind(this)
   }
   
   clear() {
@@ -46,24 +46,21 @@ class Logger extends React.Component {
   }
   
   _appendLog(type, message) {
-    console.log('appending to log:', type, message, this)
-    try {
-      this.setState({ messages: [
-        ...this.state.messages,
-        { type: type, message: message }
-      ]})
-    } catch (e) {
-      console.error(e)
-    }
+    this.setState({ messages: [
+      ...this.state.messages,
+      { type: type, message: message }
+    ]})
   }
   
   render() {
     return (
-      <ol>
-        {this.state.messages.map((message, i) =>
-          <li>{message.type}: {util.inspect(message.message)}</li>
-        )}
-      </ol>
+      <div class="logger">
+        <ul>
+          {this.state.messages.map((message, i) =>
+            <li class={message.type}>{util.inspect(message.message)}</li>
+          )}
+        </ul>
+      </div>
     )
   }
 }
