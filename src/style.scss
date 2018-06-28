@@ -1,0 +1,153 @@
+@import url('https://fonts.googleapis.com/css?family=Crete+Round|Raleway');
+
+@import 'node_modules/codemirror/lib/codemirror';
+
+body {
+  font-family: 'Raleway', sans-serif;
+  margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Crete Round', serif;
+  margin: 0;
+}
+
+h1 {
+  font-size: 48px;
+}
+
+a {
+  text-decoration: none;
+}
+
+.top {
+  padding: 20px;
+}
+
+.top p {
+  margin-top: 10px;
+}
+
+.github {
+  float: right;
+  margin-left: 20px;
+}
+
+.github .icon {
+  width: 48px;
+  fill: #ccc;
+  transition: fill .15s ease-in-out;
+}
+
+.github .icon:hover {
+  fill: #000;
+}
+
+.top ul {
+  list-style: none;
+  padding: 0;
+}
+
+.top ul li {
+  display: inline;
+  padding-right: 40px;
+}
+
+.CodeMirror {
+  height: auto;
+}
+
+.parent {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.child {
+  width: 50%;
+}
+
+button, select {
+  padding:.375rem .75rem;
+  color: #495057;
+  vertical-align: middle;
+  border: 1px solid #ced4da;
+  border-radius: .25rem;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+button:disabled {
+  color: #007bff;
+  background-color: transparent;
+  opacity: .65;
+}
+
+button:not(:disabled) {
+  cursor: pointer;
+}
+
+button {
+  color: #007bff;
+  background-color: transparent;
+  background-image: none;
+  border-color: #007bff;
+  text-align: center;
+  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+button:not(:disabled):hover, button:not(:disabled):active {
+  color: #fff;
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+select {
+  padding-right: 1.75rem;
+  background: #fff url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E") no-repeat right .75rem center;
+  background-size: 8px 10px;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  
+  border-bottom: 1px solid #dee2e6;
+  padding: 0 20px;
+}
+
+.nav-tabs {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin-bottom: 0;
+}
+
+.nav-tabs .nav-item {
+  margin-bottom: -1px;
+}
+
+.nav-tabs .nav-link.active {
+  color: black;
+  background-color: white;
+  border-color: #dee2e6 #dee2e6 white;
+}
+
+.nav-tabs .nav-link {
+  font-family: 'Crete Round', serif;
+  border: 1px solid transparent;
+  border-top-left-radius: .25rem;
+  border-top-right-radius: .25rem;
+}
+
+.nav-link {
+  display: block;
+  padding: .45rem .9rem;
+}
+
+@media (max-width: 800px) {
+  .child {
+    width: 100%;
+  }
+}

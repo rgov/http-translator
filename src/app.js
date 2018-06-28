@@ -6,8 +6,8 @@ const ReactDOM = require('react-dom')
 const CodeMirror = require('react-codemirror2')
 const CodeMirrorJS = require('codemirror')
 
-const curlFrontend = require('./lib/frontends/curl')
-const pyreqBackend = require('./lib/backends/python-requests')
+const curlFrontend = require('../lib/frontends/curl')
+const pyreqBackend = require('../lib/backends/python-requests')
 
 
 // This tells Browserify to pull in these syntax highlighters. We cannot do this
@@ -26,18 +26,18 @@ class App extends React.Component {
     
     // List the frontends, transforms, and backends we want to load
     this.state.frontends = [
-      require('./lib/frontends/curl'),
-      require('./lib/frontends/http'),
-      require('./lib/frontends/json')
+      require('../lib/frontends/curl'),
+      require('../lib/frontends/http'),
+      require('../lib/frontends/json')
     ]
     this.state.transforms = [
-      require('./lib/transforms/drop-host-header'),
-      require('./lib/transforms/drop-content-length-header'),
-      require('./lib/transforms/split-form-data'),
+      require('../lib/transforms/drop-host-header'),
+      require('../lib/transforms/drop-content-length-header'),
+      require('../lib/transforms/split-form-data'),
     ]
     this.state.backends = [
-      require('./lib/backends/python-requests'),
-      require('./lib/backends/json')
+      require('../lib/backends/python-requests'),
+      require('../lib/backends/json')
     ]
     
     // Choose the default frontends

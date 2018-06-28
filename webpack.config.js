@@ -2,13 +2,14 @@ const webpack = require('webpack')
 const path = require('path')
 
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 
 module.exports = {
   mode: 'production',
   
-  entry: './main.js',
+  entry: './src/index.js',
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist')
@@ -24,6 +25,10 @@ module.exports = {
         query: {
           presets: ['env', 'react']
         }
+      },
+      {
+        test: /\.s?css$/,
+        use: [ MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader' ]
       }
     ]
   },
@@ -38,9 +43,11 @@ module.exports = {
   
   plugins: [
     new CopyWebpackPlugin([
-      { from: 'index.html' },
-      { from: 'node_modules/codemirror/lib/codemirror.css' }
-    ])
+      { from: 'src/index.html' }
+    ]),
+    new MiniCssExtractPlugin({
+      filename: '[name].css'
+    })
   ],
   
   // This is to fix the fact that argparse has some code that accesses the
