@@ -1,5 +1,7 @@
 'use strict'
 
+const util = require('util')
+
 const React = require('react')
 const ReactDOM = require('react-dom')
 
@@ -17,6 +19,54 @@ require('codemirror/mode/http/http')
 require('codemirror/mode/javascript/javascript')
 require('codemirror/mode/python/python')
 require('codemirror/mode/shell/shell')
+
+
+class Logger extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      messages: []
+    }
+    
+    this.log.bind(this)
+    this.error.bind(this)
+  }
+  
+  clear() {
+    this.setState({ messages: [] })
+  }
+  
+  log() {
+    this._appendLog('log', Array.from(arguments))
+  }
+  
+  error() {
+    console.error.apply(console, Array.from(arguments))
+    this._appendLog('error', Array.from(arguments))
+  }
+  
+  _appendLog(type, message) {
+    console.log('appending to log:', type, message, this)
+    try {
+      this.setState({ messages: [
+        ...this.state.messages,
+        { type: type, message: message }
+      ]})
+    } catch (e) {
+      console.error(e)
+    }
+  }
+  
+  render() {
+    return (
+      <ol>
+        {this.state.messages.map((message, i) =>
+          <li>{message.type}: {util.inspect(message.message)}</li>
+        )}
+      </ol>
+    )
+  }
+}
 
 
 class App extends React.Component {
@@ -86,22 +136,23 @@ class App extends React.Component {
   }
   
   handleCodeChange() {
+    this.logger.clear()
     var p = Promise.resolve(this.state.input)
     p.then((input) => {
-      return this.state.frontend.parse(input)
+      return this.state.frontend.parse(input, this.logger)
     }).then((request) => {
       for (let transform of this.state.transforms) {
-        console.log('I will apply this transform:', transform.name)
-        transform.transform(request)
+        this.logger.log('I will apply this transform:', transform.name)
+        transform.transform(request, this.logger)
       }
       return request
     }).then((request) => {
-      return this.state.backend.generate(request)
+      return this.state.backend.generate(request, this.logger)
     }).then((output) => {
       this.setState({ output: output })
     }).catch((error) => {
       // TODO: Present the error message to the user somehow
-      console.log('I caught an error:', error)
+      this.logger.error('I caught an error:', error)
     })
   }
   
@@ -124,7 +175,7 @@ class App extends React.Component {
   }
   
   render() {
-    return (
+    return (      
       <div class="parent">
         <div class="child">
           <div class="nav">
@@ -183,6 +234,7 @@ class App extends React.Component {
             </ul>
           </div>
           <div>
+            <Logger ref={(c) => this.logger = c} />
             <CodeMirror.Controlled
               value={this.state.output}
               options={{
