@@ -8,11 +8,8 @@ const ReactDOM = require('react-dom')
 const CodeMirror = require('react-codemirror2')
 const CodeMirrorJS = require('codemirror')
 
-const curlFrontend = require('../lib/frontends/curl')
-const pyreqBackend = require('../lib/backends/python-requests')
 
-
-// This tells Browserify to pull in these syntax highlighters. We cannot do this
+// This tells webpack to pull in these syntax highlighters. We cannot do this
 // dynamically, so make sure to update this if new frontends or backends are
 // added.
 require('codemirror/mode/http/http')
@@ -35,6 +32,10 @@ class Logger extends React.Component {
   clear() {
     this.setState({ messages: [] })
   }
+
+  addSection(name) {
+    this._appendLog('section', [ name ])
+  }
   
   log() {
     this._appendLog('log', Array.from(arguments))
@@ -46,9 +47,18 @@ class Logger extends React.Component {
   }
   
   _appendLog(type, message) {
+    let strmsg = '';
+    for (let part of message) {
+      if (typeof part === 'string') {
+        strmsg += `${part} `
+      } else {
+        strmsg += util.inspect(part)
+      }
+    }
+
     this.setState({ messages: [
       ...this.state.messages,
-      { type: type, message: message }
+      { type: type, content: strmsg }
     ]})
   }
   
@@ -57,7 +67,7 @@ class Logger extends React.Component {
       <div class="logger">
         <ul>
           {this.state.messages.map((message, i) =>
-            <li class={message.type}>{util.inspect(message.message)}</li>
+            <li class={message.type}>{message.content}</li>
           )}
         </ul>
       </div>
@@ -94,6 +104,9 @@ class App extends React.Component {
     // Set the default input and clear output
     this.state.input = this.state.frontend.example
     this.state.output = ''
+    
+    // Set the tab we want to show
+    this.state.showLogTab = false
     
     // Bind `this` so that handlers for JavaScript events work
     this.handleFrontendChange = this.handleFrontendChange.bind(this)
@@ -136,20 +149,21 @@ class App extends React.Component {
     this.logger.clear()
     var p = Promise.resolve(this.state.input)
     p.then((input) => {
+      this.logger.addSection(`Frontend: ${this.state.frontend.name}`)
       return this.state.frontend.parse(input, this.logger)
     }).then((request) => {
       for (let transform of this.state.transforms) {
-        this.logger.log('I will apply this transform:', transform.name)
+        this.logger.addSection(`Transform: ${transform.name}`)
         transform.transform(request, this.logger)
       }
       return request
     }).then((request) => {
+      this.logger.addSection(`Backend: ${this.state.backend.name}`)
       return this.state.backend.generate(request, this.logger)
     }).then((output) => {
       this.setState({ output: output })
     }).catch((error) => {
-      // TODO: Present the error message to the user somehow
-      this.logger.error('I caught an error:', error)
+      this.logger.error(error)
     })
   }
   
@@ -217,8 +231,13 @@ class App extends React.Component {
         <div class="child">
           <div class="nav">
             <ul class="nav-tabs">
-              <li class="nav-item"><a class="nav-link active" href="#">Output</a></li>
-              <li class="nav-item"><a class="nav-link" href="#">Log</a></li>
+              <li class="nav-item">
+                <a class={"nav-link" + (this.state.showLogTab ? "" : " active")} 
+                   onClick={() => this.setState({ showLogTab: false })}
+                   href="#">Output</a></li>
+              <li class="nav-item"><a class={"nav-link" + (this.state.showLogTab ? " active" : "")} 
+                   onClick={() => this.setState({ showLogTab: true })}
+                   href="#">Log</a></li>
             </ul>
             <ul class="nav-tabs controls">
               <li class="nav-item">
@@ -231,18 +250,22 @@ class App extends React.Component {
             </ul>
           </div>
           <div>
-            <Logger ref={(c) => this.logger = c} />
-            <CodeMirror.Controlled
-              value={this.state.output}
-              options={{
-                mode: this.state.backend.highlighter,
-                lineNumbers: true,
-                lineWrapping: true,
-                viewportMargin: Infinity,
-                readOnly: true
-              }}
-              editorDidMount={(editor) => { this.outputEditor = editor }}
-            />
+            <div class={this.state.showLogTab ? "" : "hide"}>
+              <Logger ref={(c) => this.logger = c} />
+            </div>
+            <div class={this.state.showLogTab ? "hide" : ""}>
+              <CodeMirror.Controlled
+                value={this.state.output}
+                options={{
+                  mode: this.state.backend.highlighter,
+                  lineNumbers: true,
+                  lineWrapping: true,
+                  viewportMargin: Infinity,
+                  readOnly: true
+                }}
+                editorDidMount={(editor) => { this.outputEditor = editor }}
+              />
+            </div>
           </div>
         </div>
       </div>

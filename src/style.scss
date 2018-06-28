@@ -1,10 +1,14 @@
-@import url('https://fonts.googleapis.com/css?family=Crete+Round|Raleway');
+@import url('https://fonts.googleapis.com/css?family=Crete+Round');
 
 @import 'node_modules/codemirror/lib/codemirror';
 
 body {
-  font-family: 'Raleway', sans-serif;
+  font-family: sans-serif;
   margin: 0;
+}
+
+.hide {
+  display: none;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -20,37 +24,35 @@ a {
   text-decoration: none;
 }
 
-.top {
-  padding: 20px;
-}
-
-.top p {
-  margin-top: 10px;
-}
-
 .github {
   float: right;
   margin-left: 20px;
+
+  .icon {
+    width: 48px;
+    opacity: 0.4;
+    transition: opacity .15s ease-in-out;
+
+    &:hover {
+      opacity: 1.0;
+    }
+  }
 }
 
-.github .icon {
-  width: 48px;
-  fill: #ccc;
-  transition: fill .15s ease-in-out;
-}
+.top {
+  padding: 20px;
 
-.github .icon:hover {
-  fill: #000;
-}
-
-.top ul {
-  list-style: none;
-  padding: 0;
-}
-
-.top ul li {
-  display: inline;
-  padding-right: 40px;
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+  ul li {
+    display: inline;
+    padding-right: 40px;
+  }
+  p {
+    margin-top: 10px;
+  }
 }
 
 .CodeMirror {
@@ -77,16 +79,6 @@ button, select {
   appearance: none;
 }
 
-button:disabled {
-  color: #007bff;
-  background-color: transparent;
-  opacity: .65;
-}
-
-button:not(:disabled) {
-  cursor: pointer;
-}
-
 button {
   color: #007bff;
   background-color: transparent;
@@ -94,13 +86,25 @@ button {
   border-color: #007bff;
   text-align: center;
   transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+
+  &:not(:disabled):hover, &:not(:disabled):active {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+  }
+
+  &:disabled {
+    color: #007bff;
+    background-color: transparent;
+    opacity: .65;
+  }
+  
+  &:not(:disabled) {
+    cursor: pointer;
+  }
 }
 
-button:not(:disabled):hover, button:not(:disabled):active {
-  color: #fff;
-  background-color: #007bff;
-  border-color: #007bff;
-}
+
 
 select {
   padding-right: 1.75rem;
@@ -115,50 +119,95 @@ select {
   
   border-bottom: 1px solid #dee2e6;
   padding: 0 20px;
+  
+  .nav-tabs {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin-bottom: 0;
+  
+    .nav-item {
+      margin-bottom: -1px;
+    }
+  
+    .nav-link {
+      display: block;
+      padding: .45rem .9rem;
+  
+      font-family: 'Crete Round', serif;
+      border: 1px solid transparent;
+      border-top-left-radius: .25rem;
+      border-top-right-radius: .25rem;
+
+      color: #666;
+  
+      &.active {
+        color: black;
+        background-color: white;
+        border-color: #dee2e6 #dee2e6 white;
+      }
+    }
+  }
 }
 
-.nav-tabs {
-  display: flex;
-  list-style: none;
-  padding: 0;
-  margin-bottom: 0;
-}
-
-.nav-tabs .nav-item {
-  margin-bottom: -1px;
-}
-
-.nav-tabs .nav-link.active {
-  color: black;
-  background-color: white;
-  border-color: #dee2e6 #dee2e6 white;
-}
-
-.nav-tabs .nav-link {
-  font-family: 'Crete Round', serif;
-  border: 1px solid transparent;
-  border-top-left-radius: .25rem;
-  border-top-right-radius: .25rem;
-}
-
-.nav-link {
-  display: block;
-  padding: .45rem .9rem;
-}
 
 .logger {
+  font-family: monospace;
+  padding-right: 1em;
+
   ul {
     list-style: none;
     padding: 0;
 
     li {
-      &:before { content: "• "; }
-      padding-left: 1em;
-      text-indent: -.7em;
-    }
 
-    li.error:before { color: red; }
-    li.log:before { color: gray; }
+      &.section {
+        font-weight: bold;
+        padding-left: 1em;
+        padding-top: 1em;
+
+        &:first-child {
+          padding-top: 0
+        }
+      }
+
+      &:not(.section) {
+        padding-left: 2em;
+      }
+      
+      &.error:before {
+        content: "";
+
+        /* useful: http://apps.eky.hk/css-triangle-generator/ */
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 0 4px 6.9px 4px;
+        border-color: transparent transparent red transparent;
+
+        left: -0.9em; /* looks better */
+        top: 0.8em;
+        position: relative;
+
+        display: block;
+      }
+
+      &.log:before {
+        content: "";
+
+        width: 6px;
+        height: 6px;
+        background-color: gray;
+        border-radius: 50%;
+
+        left: -0.8em;
+        top: 0.8em;
+        position: relative;
+
+        display: block;
+      }
+    }
+      
   }
 } 
 
