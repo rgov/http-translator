@@ -4,6 +4,8 @@ This tool can be used for translating HTTP requests from one format to another. 
 
 Thee tool is not complete; it doesn’t know about some basic things right now (such as cookies) or less common curl options such as `--proxy-header`. Contributions are welcome.
 
+See also Matt Holt's [curl-to-Go](https://mholt.github.io/curl-to-go/), if that fits your use case better.
+
 **Hint:** You can generate curl commands in the Safari Web Inspector by right-clicking on a resource in the Network or Resources tab and selecting "Copy as cURL".
 
 ## Building from Source
