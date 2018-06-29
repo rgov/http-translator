@@ -232,12 +232,18 @@ class App extends React.Component {
           <div class="nav">
             <ul class="nav-tabs">
               <li class="nav-item">
-                <a class={"nav-link" + (this.state.showLogTab ? "" : " active")} 
-                   onClick={() => this.setState({ showLogTab: false })}
-                   href="#">Output</a></li>
+                <a class={"nav-link" + (this.state.showLogTab ? "" : " active")}
+                  onClick={(e) => {
+                    this.setState({ showLogTab: false })
+                    e.preventDefault()
+                  }}
+                  href="#">Output</a></li>
               <li class="nav-item"><a class={"nav-link" + (this.state.showLogTab ? " active" : "")} 
-                   onClick={() => this.setState({ showLogTab: true })}
-                   href="#">Log</a></li>
+                   onClick={(e) => {
+                    this.setState({ showLogTab: true })
+                    e.preventDefault()
+                  }}
+                  href="#">Log</a></li>
             </ul>
             <ul class="nav-tabs controls">
               <li class="nav-item">
