@@ -2,6 +2,26 @@
 
 @import 'node_modules/codemirror/lib/codemirror';
 
+%red-triangle {
+  content: "";
+
+  /* useful: http://apps.eky.hk/css-triangle-generator/ */
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 4px 6.9px 4px;
+  border-color: transparent transparent red transparent;
+}
+
+%gray-circle {
+  content: "";
+
+  width: 6px;
+  height: 6px;
+  background-color: gray;
+  border-radius: 50%;
+}
+
 body {
   font-family: sans-serif;
   margin: 0;
@@ -147,6 +167,15 @@ select {
         background-color: white;
         border-color: #dee2e6 #dee2e6 white;
       }
+      
+      &.error:after {
+        @extend %red-triangle;
+
+        left: 0.25em;
+        position: relative;
+
+        display: inline-block;
+      }
     }
   }
 }
@@ -175,16 +204,9 @@ select {
       &:not(.section) {
         padding-left: 2em;
       }
-      
-      &.error:before {
-        content: "";
 
-        /* useful: http://apps.eky.hk/css-triangle-generator/ */
-        width: 0;
-        height: 0;
-        border-style: solid;
-        border-width: 0 4px 6.9px 4px;
-        border-color: transparent transparent red transparent;
+      &.error:before {
+        @extend %red-triangle;
 
         left: -0.9em; /* looks better */
         top: 0.8em;
@@ -194,12 +216,7 @@ select {
       }
 
       &.log:before {
-        content: "";
-
-        width: 6px;
-        height: 6px;
-        background-color: gray;
-        border-radius: 50%;
+        @extend %gray-circle;
 
         left: -0.8em;
         top: 0.8em;

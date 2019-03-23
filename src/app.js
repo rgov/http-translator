@@ -46,6 +46,14 @@ class Logger extends React.Component {
     this._appendLog('error', Array.from(arguments))
   }
   
+  hasError() {
+    for (let message of this.state.messages) {
+      if (message.type === 'error')
+        return true;
+    }
+    return false;
+  }
+  
   _appendLog(type, message) {
     let strmsg = '';
     for (let part of message) {
@@ -237,13 +245,16 @@ class App extends React.Component {
                     this.setState({ showLogTab: false })
                     e.preventDefault()
                   }}
-                  href="#">Output</a></li>
-              <li class="nav-item"><a class={"nav-link" + (this.state.showLogTab ? " active" : "")} 
-                   onClick={(e) => {
+                  href="#">Output</a>
+              </li>
+              <li class="nav-item">
+                <a class={"nav-link" + (this.state.showLogTab ? " active" : "") + (this.logger && this.logger.hasError() ? " error" : "")} 
+                  onClick={(e) => {
                     this.setState({ showLogTab: true })
                     e.preventDefault()
                   }}
-                  href="#">Log</a></li>
+                  href="#">Log</a>
+              </li>
             </ul>
             <ul class="nav-tabs controls">
               <li class="nav-item">
