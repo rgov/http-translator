@@ -96,8 +96,9 @@ class App extends React.Component {
       require('../lib/frontends/json')
     ]
     this.state.transforms = [
-      require('../lib/transforms/drop-host-header'),
       require('../lib/transforms/drop-content-length-header'),
+      require('../lib/transforms/drop-host-header'),
+      require('../lib/transforms/parse-json-data'),
       require('../lib/transforms/split-form-data'),
     ]
     this.state.backends = [
