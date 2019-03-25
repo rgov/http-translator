@@ -12,7 +12,7 @@
     "preact": "^8.4.2",
     "preact-compat": "^3.18.4",
     "react-codemirror2": "^5.1.0",
-    "shlex": "^2.0.0"
+    "shlex": "^2.0.1"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
