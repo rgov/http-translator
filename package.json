@@ -7,10 +7,10 @@
   "dependencies": {
     "argparse": "^1.0.10",
     "bootstrap": "^4.3.1",
-    "codemirror": "^5.45.0",
+    "codemirror": "^5.48.2",
     "http-parser-js": "^0.4.13",
     "preact": "^8.4.2",
-    "preact-compat": "^3.18.4",
+    "preact-compat": "^3.19.0",
     "react-codemirror2": "^5.1.0",
     "shlex": "^2.0.1"
   },
@@ -22,12 +22,12 @@
     "copy-webpack-plugin": "^4.6.0",
     "css-loader": "^3.1.0",
     "mini-css-extract-plugin": "^0.4.5",
-    "node-sass": "^4.11.0",
+    "node-sass": "^4.12.0",
     "sass-loader": "^7.1.0",
     "uglifyjs-webpack-plugin": "^1.3.0",
-    "webpack": "^4.29.6",
-    "webpack-cli": "^3.3.0",
-    "webpack-dev-server": "^3.2.1"
+    "webpack": "^4.36.1",
+    "webpack-cli": "^3.3.6",
+    "webpack-dev-server": "^3.7.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
