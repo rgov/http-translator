@@ -1,18 +1,26 @@
 # HTTP Request Translator
 
-This tool can be used for translating HTTP requests from one format to another. Currently, that means translating from a curl command-line invocation or raw HTTP request into Python Requests code.
+This tool translates HTTP requests from a curl command-line invocation or raw HTTP request into Python Requests code.
+
+You can generate curl commands from several tools:
+
+* **[Burp Suite](https://portswigger.net/burp):** Right-click on a request and select "Copy as curl command".
+
+* **[Charles](https://www.charlesproxy.com):** Right-click on a request and select "Copy cURL Request".
+
+* **Safari Web Inspector:** Right-click on a resource in the Network or Resources tab and select "Copy as cURL".
 
 Thee tool is not complete; it doesn’t know about some basic things right now (such as cookies) or less common curl options such as `--proxy-header`. Contributions are welcome.
 
 See also Matt Holt's [curl-to-Go](https://mholt.github.io/curl-to-go/), if that fits your use case better.
 
-**Hint:** You can generate curl commands in the Safari Web Inspector by right-clicking on a resource in the Network or Resources tab and selecting "Copy as cURL".
 
 ## Building from Source
 
     npm install && npx webpack
 
 Build results will be put in `/dist`. You can also run a development webserver with `npm run-script start:dev`.
+
 
 ## Implementation
 
