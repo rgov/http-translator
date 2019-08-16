@@ -102,13 +102,14 @@ class App extends React.Component {
       require('../lib/transforms/split-form-data'),
     ]
     this.state.backends = [
+      require('../lib/backends/javascript-xhr'),
       require('../lib/backends/python-requests'),
       require('../lib/backends/json')
     ]
     
     // Choose the default frontends
     this.state.frontend = this.state.frontends[0]
-    this.state.backend  = this.state.backends[0]
+    this.state.backend  = this.state.backends[1]
     
     // Set the default input and clear output
     this.state.input = this.state.frontend.example
