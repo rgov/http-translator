@@ -1,6 +1,6 @@
 # HTTP Request Translator
 
-This tool translates HTTP requests from a curl command-line invocation or raw HTTP request into Python Requests code.
+This tool translates HTTP requests from a curl command-line invocation or raw HTTP request into Python or JavaScript code.
 
 You can generate curl commands from several tools:
 
