@@ -23,7 +23,7 @@ module.exports = {
         loader: 'babel-loader',
         exclude: /node_modules/,
         query: {
-          presets: ['env', 'react']
+          presets: ['@babel/env', '@babel/react']
         }
       },
       {
@@ -36,8 +36,8 @@ module.exports = {
   // Use Preact compatibility layer in React's place
   resolve: {
     alias: {
-      'react': 'preact-compat',
-      'react-dom': 'preact-compat',
+      'react': 'preact/compat',
+      'react-dom': 'preact/compat',
     }
   },
   
