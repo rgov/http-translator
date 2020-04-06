@@ -1,3 +1,5 @@
+![Build](https://github.com/rgov/http-translator/workflows/Node.js%20CI/badge.svg)
+
 # HTTP Request Translator
 
 This tool translates HTTP requests from a curl command-line invocation or raw HTTP request into Python or JavaScript code.
@@ -17,7 +19,7 @@ See also Matt Holt's [curl-to-Go](https://mholt.github.io/curl-to-go/), if that 
 
 ## Building from Source
 
-    npm install && npx webpack
+    npm install && npm run build
 
 Build results will be put in `/dist`. You can also run a development webserver with `npm run-script start:dev`.
 
