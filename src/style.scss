@@ -1,6 +1,6 @@
-@import url('https://fonts.googleapis.com/css?family=Crete+Round');
+@use 'codemirror/lib/codemirror' as *;
 
-@import 'node_modules/codemirror/lib/codemirror';
+@import url('https://fonts.googleapis.com/css?family=Crete+Round');
 
 %red-triangle {
   content: "";

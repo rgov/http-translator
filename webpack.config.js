@@ -54,5 +54,11 @@ module.exports = {
   // filesystem, but we obviously don't use that in the browser
   node: {
     fs: "empty"
-  }
+  },
+
+  // fsevents is broken our current combination of Node and Webpack
+  watchOptions: {
+    poll: 1000,
+    ignored: /node_modules/,
+  },
 }
