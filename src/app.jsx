@@ -5,16 +5,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import {Controlled as CodeMirror} from 'react-codemirror2'
-import * as CodeMirrorJS from 'codemirror'
-
-// This tells Vite to pull in these syntax highlighters. We cannot do this
-// dynamically, so make sure to update this if new frontends or backends are
-// added.
-import 'codemirror/mode/http/http'
-import 'codemirror/mode/javascript/javascript'
-import 'codemirror/mode/python/python'
-import 'codemirror/mode/shell/shell'
+import CodeMirror from '@uiw/react-codemirror'
+import { javascript as langJavaScript } from '@codemirror/lang-javascript'
+import { json as langJson } from '@codemirror/lang-json'
+import { python as langPython } from '@codemirror/lang-python'
+import { EditorView, lineNumbers } from '@codemirror/view'
 
 import frontendCurl from '../lib/frontends/curl'
 import frontendHttp from '../lib/frontends/http'
@@ -36,11 +31,11 @@ class Logger extends React.Component {
     this.state = {
       messages: []
     }
-    
+
     this.log = this.log.bind(this)
     this.error = this.error.bind(this)
   }
-  
+
   clear() {
     this.setState({ messages: [] })
   }
@@ -48,16 +43,16 @@ class Logger extends React.Component {
   addSection(name) {
     this._appendLog('section', [ name ])
   }
-  
+
   log() {
     this._appendLog('log', Array.from(arguments))
   }
-  
+
   error() {
     console.error.apply(console, Array.from(arguments))
     this._appendLog('error', Array.from(arguments))
   }
-  
+
   hasError() {
     for (let message of this.state.messages) {
       if (message.type === 'error')
@@ -65,7 +60,7 @@ class Logger extends React.Component {
     }
     return false;
   }
-  
+
   _appendLog(type, message) {
     let strmsg = '';
     for (let part of message) {
@@ -81,7 +76,7 @@ class Logger extends React.Component {
       { type: type, content: strmsg }
     ]})
   }
-  
+
   render() {
     return (
       <div className="logger">
@@ -100,7 +95,7 @@ class App extends React.Component {
   constructor() {
     super()
     this.state = {}
-    
+
     // List the frontends, transforms, and backends we want to load
     this.state.frontends = [
       frontendCurl,
@@ -118,55 +113,43 @@ class App extends React.Component {
       backendPythonRequests,
       backendJson,
     ]
-    
+
     // Choose the default frontends
     this.state.frontend = this.state.frontends[0]
     this.state.backend  = this.state.backends[1]
-    
+
     // Set the default input and clear output
     this.state.input = this.state.frontend.example
     this.state.output = ''
-    
+
     // Set the tab we want to show
     this.state.showLogTab = false
-    
+
     // Bind `this` so that handlers for JavaScript events work
     this.handleFrontendChange = this.handleFrontendChange.bind(this)
     this.handleBackendChange  = this.handleBackendChange.bind(this)
-    
+
     // These will store our code editor instances, after they've mounted
     this.inputEditor = null
     this.outputEditor = null
   }
-  
+
   componentDidMount() {
-    // Wire up the renderLine handler on both of them
-    for (let editor of [this.inputEditor, this.outputEditor]) {
-      editor.on('renderLine', (cm, line, elt) => {
-        let charWidth = editor.defaultCharWidth()
-        let hangingIndent = charWidth * 2
-        var off = CodeMirrorJS.countColumn(line.text, null, cm.getOption('tabSize')) * charWidth
-        elt.style.textIndent = `-${hangingIndent + off}px`
-        elt.style.paddingLeft = `${hangingIndent + off}px`
-      })
-      editor.refresh()
-    }
-    
     // Kick off the initial generation
     this.handleCodeChange()
   }
-  
+
   componentDidUpdate(prevProps, prevState, snapshot) {
-    // Re-generate if any of the input parameters changed 
+    // Re-generate if any of the input parameters changed
     if ((this.state.input !== prevState.input ||
         this.state.frontend !== prevState.frontend ||
         this.state.backend !== prevState.backend) &&
         this.state.output === prevState.output) {
-          
+
       this.handleCodeChange()
     }
   }
-  
+
   handleCodeChange() {
     this.logger.clear()
     var p = Promise.resolve(this.state.input)
@@ -188,7 +171,7 @@ class App extends React.Component {
       this.logger.error(error)
     })
   }
-  
+
   handleFrontendChange(event) {
     for (var frontend of this.state.frontends) {
       if (frontend.name === event.target.value) {
@@ -197,7 +180,7 @@ class App extends React.Component {
       }
     }
   }
-  
+
   handleBackendChange(event) {
     for (var backend of this.state.backends) {
       if (backend.name === event.target.value) {
@@ -206,9 +189,19 @@ class App extends React.Component {
       }
     }
   }
-  
+
+  getLangHighlighter(highlighter) {
+    switch (highlighter) {
+      case 'javascript': return langJavaScript();
+      case 'json': return langJson();
+      case 'python': return langPython();
+      // no http or shell highlighter
+      default: return langJavaScript();
+    }
+  }
+
   render() {
-    return (      
+    return (
       <div className="parent">
         <div className="child">
           <div className="nav">
@@ -236,20 +229,17 @@ class App extends React.Component {
           <div>
             <CodeMirror
               value={this.state.input}
-              options={{
-                mode: this.state.frontend.highlighter,
-                lineNumbers: true,
-                lineWrapping: true,
-                viewportMargin: Infinity
-              }}
-              onBeforeChange={(editor, data, value) => {
-                this.setState({ input: value })
-              }}
-              editorDidMount={(editor) => { this.inputEditor = editor }}
+              extensions={[
+                lineNumbers(),
+                this.getLangHighlighter(this.state.frontend.highlighter),
+                EditorView.lineWrapping
+              ]}
+              onChange={(value) => { this.setState({ input: value }) }}
+              onCreateEditor={(view) => { this.inputEditor = view }}
             />
           </div>
         </div>
-          
+
         <div className="child">
           <div className="nav">
             <ul className="nav-tabs">
@@ -287,14 +277,13 @@ class App extends React.Component {
             <div className={this.state.showLogTab ? "hide" : ""}>
               <CodeMirror
                 value={this.state.output}
-                options={{
-                  mode: this.state.backend.highlighter,
-                  lineNumbers: true,
-                  lineWrapping: true,
-                  viewportMargin: Infinity,
-                  readOnly: true
-                }}
-                editorDidMount={(editor) => { this.outputEditor = editor }}
+                extensions={[
+                  lineNumbers(),
+                  this.getLangHighlighter(this.state.backend.highlighter),
+                  EditorView.lineWrapping
+                ]}
+                onCreateEditor={(view) => { this.outputEditor = view }}
+                editable={false}
               />
             </div>
           </div>

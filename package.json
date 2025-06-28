@@ -9,12 +9,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@codemirror/lang-javascript": "^6.2.4",
+    "@codemirror/lang-json": "^6.0.2",
+    "@codemirror/lang-python": "^6.2.1",
+    "@uiw/react-codemirror": "^4.23.14",
     "argparse": "^2.0.1",
     "bootstrap": "^5.3.7",
-    "codemirror": "^5.65.19",
     "http-parser-js": "^0.5.10",
     "preact": "^10.26.9",
-    "react-codemirror2": "^8.0.1",
     "shlex": "^3.0.0"
   },
   "devDependencies": {
