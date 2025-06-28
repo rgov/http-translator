@@ -84,10 +84,10 @@ class Logger extends React.Component {
   
   render() {
     return (
-      <div class="logger">
+      <div className="logger">
         <ul>
           {this.state.messages.map((message, i) =>
-            <li class={message.type}>{message.content}</li>
+            <li className={message.type}>{message.content}</li>
           )}
         </ul>
       </div>
@@ -209,14 +209,14 @@ class App extends React.Component {
   
   render() {
     return (      
-      <div class="parent">
-        <div class="child">
-          <div class="nav">
-            <ul class="nav-tabs">
-              <li class="nav-item"><span class="nav-link active">Input</span></li>
+      <div className="parent">
+        <div className="child">
+          <div className="nav">
+            <ul className="nav-tabs">
+              <li className="nav-item"><span className="nav-link active">Input</span></li>
             </ul>
-            <ul class="nav-tabs controls">
-              <li class="nav-item">
+            <ul className="nav-tabs controls">
+              <li className="nav-item">
                 <button
                   onClick={() => {
                     this.setState({ input: this.state.frontend.example })
@@ -224,7 +224,7 @@ class App extends React.Component {
                   disabled={this.state.frontend.example === undefined}
                 >Load Example</button>
               </li>
-              <li class="nav-item">
+              <li className="nav-item">
                 <select value={this.state.frontend.name} onChange={this.handleFrontendChange}>
                   {this.state.frontends.map(function(frontend, i) {
                     return <option key={frontend.name} value={frontend.name}>{frontend.name}</option>
@@ -250,19 +250,19 @@ class App extends React.Component {
           </div>
         </div>
           
-        <div class="child">
-          <div class="nav">
-            <ul class="nav-tabs">
-              <li class="nav-item">
-                <a class={"nav-link" + (this.state.showLogTab ? "" : " active")}
+        <div className="child">
+          <div className="nav">
+            <ul className="nav-tabs">
+              <li className="nav-item">
+                <a className={"nav-link" + (this.state.showLogTab ? "" : " active")}
                   onClick={(e) => {
                     this.setState({ showLogTab: false })
                     e.preventDefault()
                   }}
                   href="#">Output</a>
               </li>
-              <li class="nav-item">
-                <a class={"nav-link" + (this.state.showLogTab ? " active" : "") + (this.logger && this.logger.hasError() ? " error" : "")} 
+              <li className="nav-item">
+                <a className={"nav-link" + (this.state.showLogTab ? " active" : "") + (this.logger && this.logger.hasError() ? " error" : "")}
                   onClick={(e) => {
                     this.setState({ showLogTab: true })
                     e.preventDefault()
@@ -270,8 +270,8 @@ class App extends React.Component {
                   href="#">Log</a>
               </li>
             </ul>
-            <ul class="nav-tabs controls">
-              <li class="nav-item">
+            <ul className="nav-tabs controls">
+              <li className="nav-item">
                 <select value={this.state.backend.name} onChange={this.handleBackendChange}>
                   {this.state.backends.map(function(backend, i) {
                     return <option key={backend.name} value={backend.name}>{backend.name}</option>
@@ -281,10 +281,10 @@ class App extends React.Component {
             </ul>
           </div>
           <div>
-            <div class={this.state.showLogTab ? "" : "hide"}>
+            <div className={this.state.showLogTab ? "" : "hide"}>
               <Logger ref={(c) => this.logger = c} />
             </div>
-            <div class={this.state.showLogTab ? "hide" : ""}>
+            <div className={this.state.showLogTab ? "hide" : ""}>
               <CodeMirror
                 value={this.state.output}
                 options={{
