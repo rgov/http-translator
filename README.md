@@ -21,7 +21,7 @@ See also Matt Holt's [curl-to-Go](https://mholt.github.io/curl-to-go/), if that 
 
     npm install && npm run build
 
-Build results will be put in `/dist`. You can also run a development webserver with `npm run-script start:dev`.
+Build results will be put in `/dist`. You can also run a development webserver with `npm run dev`.
 
 
 ## Implementation
