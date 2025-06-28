@@ -7,7 +7,7 @@ CF_DISTRIBUTION=E1PTO4RG80K1VB
 
 rm -Rf dist
 npm install
-npx webpack
+npm run build
 
 SYNC_COMMAND=(
     aws s3 sync

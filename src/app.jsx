@@ -1,21 +1,33 @@
 'use strict'
 
-const util = require('util')
+// Removed Node's util.inspect; using JSON.stringify for browser-friendly logging
 
-const React = require('react')
-const ReactDOM = require('react-dom')
+import React from 'react'
+import ReactDOM from 'react-dom'
 
-const CodeMirror = require('react-codemirror2')
-const CodeMirrorJS = require('codemirror')
+import {Controlled as CodeMirror} from 'react-codemirror2'
+import * as CodeMirrorJS from 'codemirror'
 
-
-// This tells webpack to pull in these syntax highlighters. We cannot do this
+// This tells Vite to pull in these syntax highlighters. We cannot do this
 // dynamically, so make sure to update this if new frontends or backends are
 // added.
-require('codemirror/mode/http/http')
-require('codemirror/mode/javascript/javascript')
-require('codemirror/mode/python/python')
-require('codemirror/mode/shell/shell')
+import 'codemirror/mode/http/http'
+import 'codemirror/mode/javascript/javascript'
+import 'codemirror/mode/python/python'
+import 'codemirror/mode/shell/shell'
+
+import frontendCurl from '../lib/frontends/curl'
+import frontendHttp from '../lib/frontends/http'
+import frontendJson from '../lib/frontends/json'
+
+import transformDropContentLengthHeader from '../lib/transforms/drop-content-length-header'
+import transformDropHostHeader from '../lib/transforms/drop-host-header'
+import transformParseJsonData from '../lib/transforms/parse-json-data'
+import transformSplitFormData from '../lib/transforms/split-form-data'
+
+import backendJavascriptXhr from '../lib/backends/javascript-xhr'
+import backendJson from '../lib/backends/json'
+import backendPythonRequests from '../lib/backends/python-requests'
 
 
 class Logger extends React.Component {
@@ -60,7 +72,7 @@ class Logger extends React.Component {
       if (typeof part === 'string') {
         strmsg += `${part} `
       } else {
-        strmsg += util.inspect(part)
+        strmsg += JSON.stringify(part, null, 2)
       }
     }
 
@@ -91,20 +103,20 @@ class App extends React.Component {
     
     // List the frontends, transforms, and backends we want to load
     this.state.frontends = [
-      require('../lib/frontends/curl'),
-      require('../lib/frontends/http'),
-      require('../lib/frontends/json')
+      frontendCurl,
+      frontendHttp,
+      frontendJson,
     ]
     this.state.transforms = [
-      require('../lib/transforms/drop-content-length-header'),
-      require('../lib/transforms/drop-host-header'),
-      require('../lib/transforms/parse-json-data'),
-      require('../lib/transforms/split-form-data'),
+      transformDropContentLengthHeader,
+      transformDropHostHeader,
+      transformParseJsonData,
+      transformSplitFormData,
     ]
     this.state.backends = [
-      require('../lib/backends/javascript-xhr'),
-      require('../lib/backends/python-requests'),
-      require('../lib/backends/json')
+      backendJavascriptXhr,
+      backendPythonRequests,
+      backendJson,
     ]
     
     // Choose the default frontends
@@ -222,7 +234,7 @@ class App extends React.Component {
             </ul>
           </div>
           <div>
-            <CodeMirror.Controlled
+            <CodeMirror
               value={this.state.input}
               options={{
                 mode: this.state.frontend.highlighter,
@@ -273,7 +285,7 @@ class App extends React.Component {
               <Logger ref={(c) => this.logger = c} />
             </div>
             <div class={this.state.showLogTab ? "hide" : ""}>
-              <CodeMirror.Controlled
+              <CodeMirror
                 value={this.state.output}
                 options={{
                   mode: this.state.backend.highlighter,
