@@ -23,6 +23,7 @@ import transformSplitFormData from '../lib/transforms/split-form-data'
 import backendJavascriptXhr from '../lib/backends/javascript-xhr'
 import backendJson from '../lib/backends/json'
 import backendPythonRequests from '../lib/backends/python-requests'
+import backendPythonUrllib from '../lib/backends/python-urllib'
 
 
 class Logger extends React.Component {
@@ -110,13 +111,14 @@ class App extends React.Component {
     ]
     this.state.backends = [
       backendJavascriptXhr,
-      backendPythonRequests,
       backendJson,
+      backendPythonRequests,
+      backendPythonUrllib,
     ]
 
     // Choose the default frontends
-    this.state.frontend = this.state.frontends[0]
-    this.state.backend  = this.state.backends[1]
+    this.state.frontend = frontendCurl
+    this.state.backend  = backendPythonUrllib
 
     // Set the default input and clear output
     this.state.input = this.state.frontend.example
