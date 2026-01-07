@@ -16,7 +16,7 @@
     "argparse": "^2.0.1",
     "bootstrap": "^5.3.7",
     "http-parser-js": "^0.5.10",
-    "preact": "^10.26.9",
+    "preact": "^10.28.2",
     "shlex": "^3.0.0"
   },
   "devDependencies": {
